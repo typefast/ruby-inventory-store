@@ -1,5 +1,17 @@
 module InventoryModule
   
+  module ClassMethods
+    def create(attributes)
+      object = new(attributes)
+      instances.push(object)
+      return object
+    end
+    
+    def instances
+      @instances ||= []
+    end
+  end
+  
   def stock_count
     @stock_count ||= 0
   end
@@ -14,6 +26,7 @@ module InventoryModule
 end
 
 class Shirt
+  extend InventoryModule::ClassMethods
   include InventoryModule
   attr_accessor :attributes
   
@@ -38,11 +51,11 @@ class Accessory
   end
 end
 
-shirt = Shirt.new(name: "POLO", size: "L")
-shirt2 = Shirt.new(name: "POLO", size: "M")
+shirt1 = Shirt.create(name: "POLO", size: "L")
+shirt2 = Shirt.create(name: "POLO", size: "M")
 
-shirt.stock_count = 10
+shirt1.stock_count = 10
 
-puts "Shirt 1 stock count: %s" % shirt.stock_count
+puts "Shirt 1 stock count: %s" % shirt1.stock_count
 puts "Shirt 2 stock count: %s" % shirt2.stock_count
-puts "Shirt 1 in stock? %s" % shirt.in_stock?
+puts "Shirt 1 in stock? %s" % shirt1.in_stock?
